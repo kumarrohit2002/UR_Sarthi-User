@@ -12,7 +12,7 @@ import { HamburgerMenu } from "./design/Header";
 import { useContext, useEffect, useState } from "react";
 import { AuthZContext } from "../context/AuthZContext";
 import { UserProfileContext } from "../context/UserProfileContext";
-import { mentorContext } from "../context/mentorContext";
+import { mentorContext } from "../context/MentorContext";
 
 const Header = () => {
   const { userData, getUserData } = useContext(UserProfileContext);
