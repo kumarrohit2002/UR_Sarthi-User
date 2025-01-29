@@ -3,7 +3,6 @@ import { ImGoogleDrive } from "react-icons/im"; // Import Google Drive icon
 
 
 const FreeResourceCard =({ course })=> {
-    console.log(course);
   return (
     <div className="border rounded-lg w-[340px] h-[380px] overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105">
       <img src={course.image} alt={course.title} className="w-full h-48 object-cover" />

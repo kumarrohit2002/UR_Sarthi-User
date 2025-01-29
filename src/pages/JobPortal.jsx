@@ -2,13 +2,20 @@ import { useContext, useEffect } from "react";
 import Header from "../components/Header";
 import { mentorContext } from "../context/MentorContext";
 import { Link } from "react-router-dom";
+import Loader from "../components/Loader";
 
 const JobPortal = () => {
-    const { getAllJobPortal, allJobPortal } = useContext(mentorContext);
-    console.log(allJobPortal);
+    const { getAllJobPortal, allJobPortal,isLoading } = useContext(mentorContext);
     useEffect(() => {
         getAllJobPortal();
     }, [])
+
+    if(isLoading) {
+        return <div>
+            <Loader/>
+        </div>;
+    }
+
     return (
         <div>
             <Header />

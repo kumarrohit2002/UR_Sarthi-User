@@ -10,7 +10,8 @@ export const UserProfileContext = createContext();
 
 export default function UserProfileContextProvider({ children }) {
   const { setUserLogedin, userLogedin } = useContext(AuthZContext);
-  const BaseUrl = 'http://localhost:4000/api/v1';
+  const[isLoading,setIsLoding]=useState(false);
+  const BaseUrl=import.meta.env.VITE_BASE_URL;
 
   const [userData, setUserData] = useState({
     name: 'Xyzbc Singh',
@@ -19,7 +20,7 @@ export default function UserProfileContextProvider({ children }) {
     phone: '+91 xxxxxxxxxxx',
     description: 'This is description',
     profilePicUrl: ProfilePic,
-    skills: [], // Initialize skills
+    skills: [],
   });
 
   const [editMode, setEditMode] = useState({
@@ -28,7 +29,7 @@ export default function UserProfileContextProvider({ children }) {
     address: false,
     phone: false,
     description: false,
-    skills: false, // Add edit mode for skills
+    skills: false, 
   });
 
   useEffect(() => {
@@ -36,10 +37,17 @@ export default function UserProfileContextProvider({ children }) {
   }, [userLogedin]);
 
   const getUserData = async () => {
-    if (userLogedin) {
+    setIsLoding(true);  
+    const isLoggedIn = localStorage.getItem('userlogin');
+    if (isLoggedIn) {
+      let UserData=localStorage.getItem('userData');
+      if(UserData) {
+        setUserData(UserData);
+        return;
+      }
       try {
-        const response = await axios.post(`${BaseUrl}/user/getuser-profile`, {}, { withCredentials: true });
-        const user = response.data.userProfile[0];
+        const response = await axios.post(`${BaseUrl}/api/v1/user/getuser-profile`, {}, { withCredentials: true });
+        const user = response.data.userProfile;
         setUserData({
           name: user.name,
           email: user.email,
@@ -47,40 +55,58 @@ export default function UserProfileContextProvider({ children }) {
           phone: user.phoneNo,
           description: user.aboutSection,
           profilePicUrl: user.profilePic || ProfilePic,
-          skills: user.skills || [], // Add skills from the response
+          skills: user.skills || [], 
         });
+        localStorage.setItem('useData',userData);
       } catch (error) {
         console.log(error);
         // toast.error('Failed to fetch user data.');
       }
+    }else{
+      console.log("User not Login");
     }
+    setIsLoding(false);
   };
 
   const handleProfilePicChange = async (e) => {
+    setIsLoding(true);
     const file = e.target.files[0];
-    if (file) {
-      const formData = new FormData();
-      formData.append('imageFile', file);
+    if (!file) {
+        toast.error('Please select a file.');
+        return;
+    }
+    const formData = new FormData();
+    formData.append('imageFile', file); 
+    // for (let pair of formData.entries()) {
+    //   console.log(pair[0], pair[1]); // Should log: imageFile, [object File]
+    // }
+    try {
+        const response = await axios.post(`${BaseUrl}/api/v1/upload-profile-pic`, formData, {
+            withCredentials: true,
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
 
-      try {
-        const response = await axios.post(`${BaseUrl}/upload-profile-pic`, formData, { withCredentials: true });
         const imageUrl = response.data.url;
         setUserData((prev) => ({
-          ...prev,
-          profilePicUrl: imageUrl,
+            ...prev,
+            profilePicUrl: imageUrl,
         }));
         toast.success('Profile picture updated successfully!');
-      } catch (error) {
+    } catch (error) {
         console.error('Error uploading profile picture:', error);
         toast.error('Error uploading profile picture.');
-      }
     }
-  };
+    setIsLoding(false);
+};
+
 
   const handleSubmit = async () => {
+    setIsLoding(true);
     const { name, email, address, phone, description, skills } = userData;
     try {
-      await axios.post(`${BaseUrl}/user/create-user-profile`, 
+      await axios.post(`${BaseUrl}/api/v1/user/create-user-profile`, 
         { name, email, address, phoneNo: phone, aboutSection: description, skills }, { withCredentials: true });
       toast.success('Profile updated successfully!');
       setEditMode({
@@ -95,6 +121,7 @@ export default function UserProfileContextProvider({ children }) {
       console.error('Error updating profile:', error);
       toast.error('Failed to update profile.');
     }
+    setIsLoding(false);
   };
 
   const handleEdit = (field, value) => {
@@ -149,6 +176,7 @@ export default function UserProfileContextProvider({ children }) {
     addSkill,
     removeSkill,
     handleSkillChange,
+    isLoading
   };
 
   return (

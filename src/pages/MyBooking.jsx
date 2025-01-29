@@ -2,14 +2,21 @@ import { useContext, useEffect } from 'react';
 import { mentorContext } from '../context/MentorContext';
 import MyBookingCard from '../components/MyBookingCard';
 import Header from '../components/Header';
+import Loader from '../components/Loader';
 
 const MyBooking = () => {
-    const { getMyBooking, myBookingData } = useContext(mentorContext);
+    const { getMyBooking, myBookingData, isLoading} = useContext(mentorContext);
     
     
     useEffect(() => {
         getMyBooking();
     }, []);
+
+    if(isLoading) {
+        return <div>
+            <Loader/>
+        </div>;
+    }
 
     return (
         <div>

@@ -1,15 +1,26 @@
 import {  useNavigate } from "react-router-dom";
 import { UserProfileContext } from '../context/UserProfileContext';
 import { AuthZContext } from "../context/AuthZContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import Header from '../components/Header'
+import Loader from "../components/Loader";
 
 
 const Profile = () => {
-  const { userData } = useContext(UserProfileContext);
+  const { userData,getUserData,isLoading } = useContext(UserProfileContext);
   const {logOut}=useContext(AuthZContext);
   const { name, address, description, email, phone, profilePicUrl } = userData;
+
+  // useEffect(() => {
+  //   getUserData();
+  // }, []);
+  
   const navigate = useNavigate();
+
+  if(isLoading){
+    return <Loader/>
+  }
+  
   return (
     <div>
       <Header/>
@@ -31,7 +42,7 @@ const Profile = () => {
             <h1 className="text-4xl font-extrabold mb-6 text-blue-500">Profile Details</h1>
             <button
               onClick={() => {
-                console.log('edit navigate call');
+                // console.log('edit navigate call');
                 navigate('/editprofile');
               }}
               className='bg-blue-500 text-white px-4 py-1 rounded-md shadow-lg hover:bg-blue-600 transform transition-all duration-300'>

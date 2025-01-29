@@ -10,10 +10,11 @@ import Cookies from 'js-cookie';
 export const AuthZContext = createContext();
 
 export default function AuthZContextProvider({ children }) {
-    const baseUrl = "http://localhost:4000/api/v1";
+    const baseUrl =import.meta.env.VITE_BASE_URL;
     const [isLogin, setIsLogin] = useState(false);
     const [isSignUp, setIsSignUp] = useState(false);
     const [userLogedin, setUserLogedin] = useState(false);
+    const [isLoading,setIsLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [inputData, setInputData] = useState({
         name: '',
@@ -29,6 +30,7 @@ export default function AuthZContextProvider({ children }) {
 
     // Step 3    
     async function handleSubmit(e) {
+        setIsLoading(true);
         e.preventDefault();
         const { name, email, password, confirmPassword, role } = inputData;
 
@@ -37,7 +39,7 @@ export default function AuthZContextProvider({ children }) {
             if (password === confirmPassword) {
                 try {
                     setIsLogin(false);
-                    const response = await axios.post(`${baseUrl}/user/signup`, { name, email, password, role });
+                    const response = await axios.post(`${baseUrl}/api/v1/user/signup`, { name, email, password, role });
                     setEmail(email);
                     console.log(response.data);
                     toast.success(response.data.message);
@@ -49,7 +51,7 @@ export default function AuthZContextProvider({ children }) {
                     } else {
                         toast.error("Something went wrong!");
                     }
-                    console.log(error.message);
+                    console.log(error);
                 }
             } else {
                 toast.error("Confirm Password does not match!");
@@ -57,10 +59,9 @@ export default function AuthZContextProvider({ children }) {
         } else {
             // Login logic
             try {
-                const response = await axios.post(`${baseUrl}/user/login`, { email, password },{ withCredentials: true });
+                const response = await axios.post(`${baseUrl}/api/v1/user/login`, { email, password },{ withCredentials: true });
                 console.log(response.data);
                 toast.success("You have successfully logged in!");
-                // Navigate to a different page if needed
                 const role=response.data.user.role;
                 if(role==='MENTOR'){
                     window.location.href = 'http://localhost:5174/';
@@ -74,12 +75,15 @@ export default function AuthZContextProvider({ children }) {
                     toast.error("Something went wrong!");
                 }
                 console.log(error.message);
+                console.log(error);
             }
         }
         setIsLogin(false);
+        setIsLoading(false);
     }
 
     async function handleOtpSubmit(e) {
+        setIsLoading(true);
         e.preventDefault();
         if (otp.includes("")) {
             setError("Please fill in all the OTP fields.");
@@ -93,7 +97,7 @@ export default function AuthZContextProvider({ children }) {
         
         try {
             if (email !== '') {
-                const response = await axios.post(`${baseUrl}/user/verify-otp`, { email, otp: finalOtp });
+                const response = await axios.post(`${baseUrl}/api/v1/user/verify-otp`, { email, otp: finalOtp });
                 console.log(response.data);
                 toast.success(response.data.message);
                 navigate('/'); 
@@ -108,12 +112,14 @@ export default function AuthZContextProvider({ children }) {
             }
             console.log(error.message);
         }
+        setIsLoading(false);
     }
 
     async function resendOtp(){
+        setIsLoading(true);
         try{
             const email=inputData.email;
-            const response = await axios.post(`${baseUrl}/resend-otp`,{email: email});
+            const response = await axios.post(`${baseUrl}/api/v1/resend-otp`,{email: email});
             console.log(response.data);
         }catch(error){
             if (error.response && error.response.data && error.response.data.message) {
@@ -123,14 +129,17 @@ export default function AuthZContextProvider({ children }) {
             }
             console.log(error.message);
         }
+        setIsLoading(false);
     }
 
     function logOut(){
+        setIsLoading(true);
         setUserLogedin(false);
         localStorage.removeItem('userlogin');
         Cookies.remove('token');
         navigate('/');
         window.location.reload();
+        setIsLoading(false);
     }
 
     const value = {
@@ -149,7 +158,8 @@ export default function AuthZContextProvider({ children }) {
         resendOtp,
         userLogedin,
         setUserLogedin,
-        logOut
+        logOut,
+        isLoading
     }
 
     // Step 2
