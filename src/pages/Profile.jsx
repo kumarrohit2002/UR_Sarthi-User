@@ -17,9 +17,9 @@ const Profile = () => {
   
   const navigate = useNavigate();
 
-  if(isLoading){
-    return <Loader/>
-  }
+  // if(isLoading){
+  //   return <Loader/>
+  // }
   
   return (
     <div>

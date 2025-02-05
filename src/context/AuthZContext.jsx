@@ -95,7 +95,7 @@ export default function AuthZContextProvider({ children }) {
         console.log("Entered OTP:", finalOtp);
         setOtp(["", "", "", ""]);
         
-        try {
+        try{
             if (email !== '') {
                 const response = await axios.post(`${baseUrl}/api/v1/user/verify-otp`, { email, otp: finalOtp });
                 console.log(response.data);

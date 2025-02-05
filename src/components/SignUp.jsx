@@ -79,28 +79,9 @@ const SignUp = () => {
                             {isSignUp && (
                                 <>
                                     <input name="confirmPassword" type="password" autoComplete="new-password" required
-                                        className="mt-2 block w-full rounded-lg border bg-white border-gray-300 px-3 py-2 shadow-sm outline-none 
+                                        className="mt-2 block w-full mb-2 rounded-lg border bg-white border-gray-300 px-3 py-2 shadow-sm outline-none 
                                         placeholder:text-gray-400 focus:ring-2 focus:ring-black focus:ring-offset-1"
                                         placeholder="Confirm Password" value={inputData.confirmPassword} onChange={handleChange} />
-                                    <div className="flex items-center mt-2">
-                                        <div className="font-semibold">Register as A:</div>
-                                        <div className="flex justify-between ml-2 gap-4 mt-2 mb-2">
-                                            <div className="flex items-center">
-                                                <input id="default-radio-1" type="radio" value="USER" name="role"
-                                                    checked={inputData.role === 'USER'} onChange={handleRadioChange} />
-                                                <label htmlFor="default-radio-1" className="ms-2 text-sm font-medium text-gray-900 ">
-                                                    USER
-                                                </label>
-                                            </div>
-                                            <div className="flex items-center">
-                                                <input id="default-radio-2" type="radio" value="MENTOR" name="role"
-                                                    checked={inputData.role === 'MENTOR'} onChange={handleRadioChange} />
-                                                <label htmlFor="default-radio-2" className="ms-2 text-sm font-medium text-gray-900 ">
-                                                    MENTOR
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </>
                             )}
                             <button type="submit"
@@ -111,12 +92,17 @@ const SignUp = () => {
                             </button>
                         </form>
 
-                        <div className="mt-6 text-center text-sm text-slate-600">
+                        <div className="mt-4 text-center text-sm text-slate-600">
                             {isSignUp ? (
-                                <p>Already have an account? <button type="button" onClick={() => setIsSignUp(false)} className="font-medium text-[#4285f4]">Login</button></p>
+                                <p>Already have an account? <button type="button" onClick={() => setIsSignUp(false)} className="font-medium  text-[#4285f4]">Login</button></p>
                             ) : (
                                 <p>Don't have an account? <button type="button" onClick={() => setIsSignUp(true)} className="font-medium text-[#4285f4]">Sign up</button></p>
                             )}
+                        </div>
+                        <div className="mt-1 text-center text-sm text-slate-600">
+                            <p>SignUp or Login as 
+                                <span onClick={()=>window.location.href = 'http://localhost:5174/'} className="text-blue-500 cursor-pointer underline"> Mentor </span>
+                            </p>
                         </div>
                     </div>
                 </div>
