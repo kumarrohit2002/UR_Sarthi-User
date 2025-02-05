@@ -101,7 +101,7 @@ const SignUp = () => {
                         </div>
                         <div className="mt-1 text-center text-sm text-slate-600">
                             <p>SignUp or Login as 
-                                <span onClick={()=>window.location.href = 'http://localhost:5174/'} className="text-blue-500 cursor-pointer underline"> Mentor </span>
+                                <span onClick={()=>window.location.href = import.meta.env.MENTOR_URL} className="text-blue-500 cursor-pointer underline"> Mentor </span>
                             </p>
                         </div>
                     </div>
