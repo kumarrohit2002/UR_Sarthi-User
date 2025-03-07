@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 const MyBookingCard = ({ item }) => {
     const { formatDate } = useContext(mentorContext);
     
-    let { mentor, slot, status ,roomNo} = item;
-    const { name, profilePic, title } = mentor;
+    let { mentorId, slot, status ,roomNo} = item;
+    const { name, profilePic, title } = mentorId;
 
     const slotDate = new Date(slot); 
     const now = new Date();

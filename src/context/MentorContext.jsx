@@ -4,6 +4,9 @@ import 'react-toastify/dist/ReactToastify.css'; //for style toast
 import axios from 'axios';
 import { AuthZContext } from "./AuthZContext";
 import { useNavigate } from 'react-router-dom';
+import Cookies from "js-cookie";
+
+
 
 // Step 1
 export const mentorContext = createContext();
@@ -88,12 +91,23 @@ export default function MentorContextProvider({ children }) {
 
     const getMyBooking=async()=>{
         setIsLoading(true);
+        const token = Cookies.get("token");
+        if(!token){
+            console.log('No token!!!');
+        }
+
         try{
-            const response = await axios.post(`${baseUrl}/api/v1/appointment/getmy-booking`, {}, {withCredentials: true,});            
+            const response = await axios.get(`${baseUrl}/api/v1/appointment/getmy-booking`, {
+                withCredentials: true, // Ensures cookies (including tokens) are sent
+                headers: {
+                    Authorization: `Bearer ${token}`, // Send token in headers (if applicable)
+                }
+            });            
             const myBooking = response.data.myBookings;
+            
             setMyBookingData(myBooking);
         }catch(error){
-            console.log(error.message);
+            console.log(error);
         }
         setIsLoading(false);
     }
@@ -130,7 +144,9 @@ export default function MentorContextProvider({ children }) {
 
     const CheckoutHandler = async (name, amount, mentorAboutData, selectedDate, selectedTime) => {
         try {
-            const { data: { order } } = await axios.post(`${import.meta.env.baseUrl}/api/v1/payment/payment-checkout`, { name, amount });
+            console.log(name+ ' '+ amount+' '+selectedDate+' '+selectedTime);
+            console.log('CheckOutHandler Called');
+            const { data: { order } } = await axios.post(`${baseUrl}/api/v1/payment/payment-checkout`, { name, amount });
 
             if (!order || !order.id || !order.amount || !order.currency) {
                 throw new Error("Order data is incomplete");
@@ -143,11 +159,11 @@ export default function MentorContextProvider({ children }) {
                 name: 'Rohit Kumar',
                 description: 'Test Transaction',
                 order_id: order.id,
-                callback_url: `${import.meta.env.baseUrl}/api/v1/payment/payment-verification`,
+                callback_url: `${baseUrl}/api/v1/payment/payment-verification`,
                 prefill: {
                     name: name,
                     email: 'gaurav.kumar@example.com',
-                    contact: '91+ 99999999'
+                    contact: '91+ 7903769260'
                 },
                 theme: {
                     color: '#F37254'

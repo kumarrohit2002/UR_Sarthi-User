@@ -14,7 +14,7 @@ const MentorCard = ({ item }) => {
     }
 
     return (
-        <div className="bg-[#0F172A] border-solid border-2 border-white  w-[300px] mb-2 mr-[17px] px-2 pb-2 gap-2 flex flex-col items-center justify-center rounded-lg">
+        <div onClick={()=>aboutSection()} className="bg-[#0F172A] border-solid border-2 border-white  w-[300px] mb-2 mr-[17px] px-2 pb-2 gap-2 flex flex-col items-center justify-center rounded-lg">
             <div className="">
                     <img className="overflow-hidden h-[200px] w-[200px] rounded p-2" src={item.profilePic} alt="profile-pic" />
             </div>
@@ -32,11 +32,11 @@ const MentorCard = ({ item }) => {
                         </h1>)
                     }
                 </div>
-                
+{/*                 
                 <div className="flex justify-between mt-2">
                     <p>Rating</p>
                     <button onClick={()=>aboutSection()} className="border-solid border-[1px] border-sky-500 text-sky-500 px-2 py-1 rounded-md">Appoint Now</button>
-                </div>
+                </div> */}
             </div>
         </div>
         

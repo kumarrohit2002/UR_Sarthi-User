@@ -15,6 +15,7 @@ import Category from "./pages/Category";
 import Failed from "./pages/Failed";
 import Success from "./pages/Success";
 import AboutSection from "./pages/AboutSection";
+import BookAppointmentPage from "./pages/BookAppointmentPage";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Route path="/category" element={<Category/>}/>
         <Route path="/room/:roomId" element={<Room/>}/>
         <Route path="/aboutsection" element={<AboutSection/>}/>
+        <Route path="/bookAppointment" element={<BookAppointmentPage/>} />
       </Routes>
     </div>
   );

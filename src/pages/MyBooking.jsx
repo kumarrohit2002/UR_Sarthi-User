@@ -12,6 +12,8 @@ const MyBooking = () => {
         getMyBooking();
     }, []);
 
+    console.log(myBookingData);
+
     if(isLoading) {
         return <div>
             <Loader/>

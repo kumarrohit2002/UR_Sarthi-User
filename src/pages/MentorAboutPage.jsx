@@ -4,12 +4,14 @@ import { mentorContext } from '../context/MentorContext';
 import Header from '../components/Header';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 const MentorAboutPage = () => {
     const { mentorAboutData, getMentorAboutData, CheckoutHandler } = useContext(mentorContext);
     const [loading, setLoading] = useState(false);
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [selectedDate, setSelectedDate] = useState("");
+    const navigate=useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -25,23 +27,23 @@ const MentorAboutPage = () => {
         fetchData();
     }, []);
 
-    const handleSlotBooking = async (day, time) => {
-        if (!selectedDate) {
-            toast.error("Please select a date.");
-            return;
-        }
-        try {
-            if (!mentorAboutData || !mentorAboutData.perHourcharge) {
-                throw new Error("Invalid mentor data or charge amount");
-            }
-            const amount = mentorAboutData.perHourcharge * 84;
-            await CheckoutHandler(mentorAboutData.name, amount, mentorAboutData, selectedDate, time);
-            setSelectedSlot({ day, time });
-            toast.success(`Slot booked for ${selectedDate} at ${time}`);
-        } catch (error) {
-            toast.error('Error in booking slot');
-        }
-    };
+    // const handleSlotBooking = async (day, time) => {
+    //     if (!selectedDate) {
+    //         toast.error("Please select a date.");
+    //         return;
+    //     }
+    //     try {
+    //         if (!mentorAboutData || !mentorAboutData.perHourcharge) {
+    //             throw new Error("Invalid mentor data or charge amount");
+    //         }
+    //         const amount = mentorAboutData.perHourcharge * 84;
+    //         await CheckoutHandler(mentorAboutData.name, amount, mentorAboutData, selectedDate, time);
+    //         setSelectedSlot({ day, time });
+    //         toast.success(`Slot booked for ${selectedDate} at ${time}`);
+    //     } catch (error) {
+    //         toast.error('Error in booking slot');
+    //     }
+    // };
 
     return (
         <div>
@@ -101,8 +103,8 @@ const MentorAboutPage = () => {
                         </div>
                     </Section>
 
-                    <Section title="Time Preferences">
-                        <input
+                    <Section >
+                        {/* <input
                             type="date"
                             className="mb-4 p-2 bg-gray-300 border rounded w-full"
                             value={selectedDate}
@@ -128,7 +130,9 @@ const MentorAboutPage = () => {
                             ))
                         ) : (
                             <p>No time preferences available</p>
-                        )}
+                        )} */}
+
+                        <button onClick={()=>navigate("/bookAppointment")} className='bg-orange-500 py-1 px-2 text-white font-semibold rounded-md'>Book Appoiment</button>
                     </Section>
                 </div>
             </div>
