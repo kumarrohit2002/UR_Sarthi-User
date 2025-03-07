@@ -3,11 +3,13 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; //for style toast
 import axios from 'axios';
 import { AuthZContext } from "./AuthZContext";
+import { useNavigate } from 'react-router-dom';
 
 // Step 1
 export const mentorContext = createContext();
 
 export default function MentorContextProvider({ children }) {
+    const navigate=useNavigate()
     const { userLogedin } = useContext(AuthZContext);
 
     const baseUrl =import.meta.env.VITE_BASE_URL;
@@ -125,6 +127,54 @@ export default function MentorContextProvider({ children }) {
         setIsLoading(false);
     }
 
+
+    const CheckoutHandler = async (name, amount, mentorAboutData, selectedDate, selectedTime) => {
+        try {
+            const { data: { order } } = await axios.post(`${import.meta.env.baseUrl}/api/v1/payment/payment-checkout`, { name, amount });
+
+            if (!order || !order.id || !order.amount || !order.currency) {
+                throw new Error("Order data is incomplete");
+            }
+
+            const options = {
+                key: `${import.meta.env.VITE_RAZORPAY_KEY}`,
+                amount: order.amount,
+                currency: order.currency,
+                name: 'Rohit Kumar',
+                description: 'Test Transaction',
+                order_id: order.id,
+                callback_url: `${import.meta.env.baseUrl}/api/v1/payment/payment-verification`,
+                prefill: {
+                    name: name,
+                    email: 'gaurav.kumar@example.com',
+                    contact: '91+ 99999999'
+                },
+                theme: {
+                    color: '#F37254'
+                },
+                handler: async function (response) {
+                    try {
+                        await bookAppointment(mentorAboutData, selectedDate, selectedTime);
+                        navigate(`/success?payment_id=${response.razorpay_payment_id}`);
+                    } catch (error) {
+                        toast.error('Error booking appointment');
+                    }
+                },
+            };
+            const rzp = new window.Razorpay(options);
+
+            rzp.on('payment.failed', function (response) {
+                toast.error('Payment failed');
+                navigate('/failed');
+            });
+
+            rzp.open();
+        } catch (error) {
+            toast.error('Checkout failed');
+        }
+    };
+
+
     const value = {
         allMentor,
         getAllMentorData,
@@ -139,7 +189,8 @@ export default function MentorContextProvider({ children }) {
         searchHandler,
         getAllJobPortal,
         allJobPortal,
-        isLoading
+        isLoading,
+        CheckoutHandler
     }
 
     // Step 2
