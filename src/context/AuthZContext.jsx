@@ -64,7 +64,7 @@ export default function AuthZContextProvider({ children }) {
                 toast.success("You have successfully logged in!");
                 const role=response.data.user.role;
                 if(role==='MENTOR'){
-                    window.location.href = 'http://localhost:5174/';
+                    window.location.href = import.meta.env.VITE_MENTOR_URL;
                 }
                 localStorage.setItem('userlogin',true);
                 setUserLogedin(true);
