@@ -11,6 +11,7 @@ URSARATHI is a mentorship platform designed to connect mentees (learners) with e
 ### ✨ Features for Mentees
 
 - 🔐 User Signup/Login with OTP verification
+![Signup Screenshot](public/signup.png)
 - 📄 Create & update your user profile
 - 🔍 Explore mentor profiles and filter by expertise
 - 📅 Book appointments with mentors
