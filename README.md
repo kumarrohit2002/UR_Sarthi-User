@@ -33,6 +33,7 @@ src/
 ```
 
 ### 🧪 Sample Mentee Workflow
+![Signup Screenshot](public/signup.png)
 
 1. **Signup/Login** using your email and password.
 2. **Verify OTP** sent to your email.
