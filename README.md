@@ -1,5 +1,25 @@
 
+---
 
+# 💼 UR-SARTHI — Full Stack Mentorship Platform
+
+**UR-SARTHI** is a scalable and modern full-stack mentorship platform that connects mentees (students or professionals) with experienced mentors across various domains. The platform is designed to make mentorship accessible, structured, and convenient for all users. Mentees can sign up using OTP-based authentication, build their profiles with personal and educational details, explore mentor profiles based on expertise and availability, and book appointments for personalized one-on-one sessions. Additional features like free resources, job listings, appointment management, and secure payments using Razorpay are also integrated to enhance the user experience.
+
+On the **mentor side**, professionals can register and create detailed public profiles showcasing their skills, languages, achievements, and availability schedule. Mentors can manage incoming appointment requests, accept or reject them, and even conduct sessions through a built-in video calling feature. The mentor dashboard provides clear visibility into upcoming sessions and previous interactions, making it easier to track and engage with mentees effectively.
+
+Technically, the frontend is divided into two separate React.js applications—one for mentees and one for mentors—each styled using Tailwind CSS and managed using React Context API. The backend is built with **Node.js**, **Express.js**, and **MongoDB**, offering robust functionality for OTP authentication, user roles, appointment scheduling, payment handling, and image uploads via Cloudinary. Axios handles API communication across the apps, and role-based access is secured with JWT and middleware.
+
+This project is ideal for educational communities, institutions, or startups looking to implement a mentorship-based solution. The architecture supports modular scaling and can easily integrate additional features like chat, email notifications, or analytics. Contributions and feedback are welcome!
+
+---
+
+## 📦 Repositories
+
+- 🔗 **User (Mentee) Frontend:** [GitHub Link](https://github.com/kumarrohit2002/UR_Sarthi-User)
+- 🔗 **Mentor Frontend:** [GitHub Link](https://github.com/kumarrohit2002/UR_Sarthi-Mentor)
+- 🔗 **Backend (API Server):** [GitHub Link](https://github.com/kumarrohit2002/UR_Shathi_BE)
+
+---
 
 ---
 
