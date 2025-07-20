@@ -16,8 +16,54 @@ import Failed from "./pages/Failed";
 import Success from "./pages/Success";
 import AboutSection from "./pages/AboutSection";
 import BookAppointmentPage from "./pages/BookAppointmentPage";
+import { useContext } from "react";
+import { AuthZContext } from "./context/AuthZContext";
+import { useEffect } from "react";
+import axios from "axios";
 
 function App() {
+  const {userLogedin,setUserLogedin}=useContext(AuthZContext);
+
+  const checkUserLogin =async () => {
+    try {
+      const res=await axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/user/isuser`, {withCredentials: true,})
+      // console.log(res.ok);
+      if(res.data.success){
+        setUserLogedin(true);
+      }else{
+        setUserLogedin(false);
+      }      
+    } catch (error) {
+      console.error("Error checking user login status:", error.message);
+      setUserLogedin(false);
+      
+    }
+  };
+
+  useEffect(()=>{
+    checkUserLogin();
+  },[userLogedin])
+
+
+  console.log('User Login??: ',userLogedin);
+
+  if(!userLogedin){
+    return (
+      <div>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<SignUp />} />
+          <Route path="/otp" element={<OtpInput />} />
+          <Route path="/mentorabout" element={<MentorAboutPage/>}/>
+          <Route path="/search" element={<SearchPage/>}/>
+          <Route path="*" element={<SignUp />} />
+        </Routes>
+      </div>
+    );
+  }
+
+
+
   return (
     <div>
       <Routes>
