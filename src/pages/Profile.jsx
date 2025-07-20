@@ -24,7 +24,7 @@ const Profile = () => {
   return (
     <div>
       <Header/>
-      <div className="flex min-h-screen mt-20 bg-[#020617] mt-2">
+      <div className="flex min-h-screen mt-20 bg-[#020617]">
         {/* Left Column */}
         <div className="w-1/3 bg-gradient-to-b bg-[#020617] border-r-[1px] border-gray-800 p-8 flex flex-col items-center">
           <img src={profilePicUrl} alt="Profile" className="w-40 h-40 rounded-full mb-4 shadow-lg hover:shadow-2xl transform transition-transform duration-500 hover:rotate-6" />
