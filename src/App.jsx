@@ -20,6 +20,8 @@ import { useContext } from "react";
 import { AuthZContext } from "./context/AuthZContext";
 import { useEffect } from "react";
 import axios from "axios";
+import NotFoundPage from "./pages/NotFoundPage";
+import { toast, ToastContainer } from "react-toastify";
 
 function App() {
   const {userLogedin,setUserLogedin}=useContext(AuthZContext);
@@ -43,6 +45,8 @@ function App() {
   useEffect(()=>{
     checkUserLogin();
   },[userLogedin])
+
+  toast.success('hello, welcome to UR Sarthi!');
 
 
   console.log('User Login??: ',userLogedin);
@@ -84,6 +88,7 @@ function App() {
         <Route path="/room/:roomId" element={<Room/>}/>
         <Route path="/aboutsection" element={<AboutSection/>}/>
         <Route path="/bookAppointment" element={<BookAppointmentPage/>} />
+        <Route path="*" element={<NotFoundPage/>} />
       </Routes>
     </div>
   );

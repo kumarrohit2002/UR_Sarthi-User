@@ -95,8 +95,8 @@ export default function MentorContextProvider({ children }) {
       toast.success("Appointment booked successfully!");
       console.log(response.data);
     } catch (error) {
-      toast.error(error.response.data.message);
-      console.log(error.response.data.message);
+      toast.error(error.message);
+      console.log(error.message);
     }
   };
 
@@ -169,9 +169,19 @@ export default function MentorContextProvider({ children }) {
     selectedTime
   ) => {
     try {
-      console.log(
-        name + " " + amount + " " + selectedDate + " " + selectedTime
-      );
+      console.log(name + " " + amount + " " + selectedDate + " " + selectedTime,mentorAboutData);
+
+      const slot = selectedDate + " " + selectedTime;
+
+      const isSlotAvailable=await axios.post(`${baseUrl}/api/v1/appointment/is-slot-available`, {mentorId: mentorAboutData._id, slot: slot});
+
+      if(!isSlotAvailable.data.isAvailable) {
+        console.log('slot is not available. Please choose another time.');
+        toast.error("Slot is not available. Please choose another time.");
+        alert('Slot is not available. Please choose another time.');
+        return;
+      }
+
       console.log("CheckOutHandler Called");
       const {
         data: { order },
@@ -194,7 +204,7 @@ export default function MentorContextProvider({ children }) {
         callback_url: `${baseUrl}/api/v1/payment/payment-verification`,
         prefill: {
           name: name,
-          email: "gaurav.kumar@example.com",
+          email: "rohit.kumar@example.com",
           contact: "91+ 7903769260",
         },
         theme: {
@@ -220,6 +230,7 @@ export default function MentorContextProvider({ children }) {
 
       rzp.open();
     } catch (error) {
+      console.log(error.message);
       toast.error("Checkout failed");
     }
   };

@@ -7,7 +7,7 @@ const Failed = () => {
         <Header/>
         <div className="mt-20 flex flex-col justify-center items-center gap-4">
             <h1>Your Payment failed</h1>
-            <Link to='/mentorabout' >
+            <Link to='/' >
                 <p className="bg-orange-600 p-1 text-center w-52 rounded">Please Try Again</p>
             </Link>
         </div>
