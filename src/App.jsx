@@ -46,7 +46,7 @@ function App() {
     checkUserLogin();
   },[userLogedin])
 
-  toast.success('hello, welcome to UR Sarthi!');
+  // toast.success('hello, welcome to UR Sarthi!');
 
 
   console.log('User Login??: ',userLogedin);
