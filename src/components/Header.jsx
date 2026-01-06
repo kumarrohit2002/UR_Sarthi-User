@@ -38,18 +38,21 @@ const Header = () => {
     enablePageScroll();
   }, [location.pathname]);
 
-  /* ---------------- TOGGLE MENU ---------------- */
-  const toggleMenu = () => {
-    setOpenNav((prev) => {
-      if (!prev) disablePageScroll();
-      else enablePageScroll();
-      return !prev;
-    });
+  /* ---------------- MENU HANDLERS ---------------- */
+  const openMenu = () => {
+    disablePageScroll();
+    setOpenNav(true);
+  };
+
+  const closeMenu = () => {
+    enablePageScroll();
+    setOpenNav(false);
   };
 
   /* ---------------- SEARCH ---------------- */
   const handleSearch = () => {
     searchHandler(searchValue);
+    closeMenu();
     navigate("/search");
   };
 
@@ -58,19 +61,15 @@ const Header = () => {
       <div className="mx-auto max-w-7xl px-4">
         <div className="flex h-[70px] items-center justify-between">
 
-          {/* -------- LOGO -------- */}
+          {/* LOGO */}
           <Link to="/" className="flex items-center gap-2">
-            <img
-              src={Mlogo}
-              alt="logo"
-              className="h-10 w-10 rounded"
-            />
+            <img src={Mlogo} alt="logo" className="h-10 w-10 rounded" />
             <span className="text-white font-semibold hidden sm:block">
               MentorHub
             </span>
           </Link>
 
-          {/* -------- SEARCH (DESKTOP) -------- */}
+          {/* SEARCH DESKTOP */}
           <div className="hidden md:flex items-center bg-white rounded-md overflow-hidden">
             <input
               value={searchValue}
@@ -78,15 +77,12 @@ const Header = () => {
               placeholder="Search mentor"
               className="px-3 py-2 outline-none text-sm"
             />
-            <button
-              onClick={handleSearch}
-              className="px-3 text-gray-600"
-            >
+            <button onClick={handleSearch} className="px-3 text-gray-600">
               <Search size={18} />
             </button>
           </div>
 
-          {/* -------- DESKTOP NAV -------- */}
+          {/* DESKTOP NAV */}
           <nav className="hidden lg:flex items-center gap-6 text-white">
             <Link to="/mybooking">My Booking</Link>
             <Link to="/category">Category</Link>
@@ -95,7 +91,7 @@ const Header = () => {
             <Link to="/aboutsection">About</Link>
           </nav>
 
-          {/* -------- RIGHT ACTIONS -------- */}
+          {/* RIGHT */}
           <div className="flex items-center gap-4">
             {userLogedin ? (
               <img
@@ -114,10 +110,7 @@ const Header = () => {
             )}
 
             {/* MOBILE MENU BUTTON */}
-            <button
-              onClick={toggleMenu}
-              className="lg:hidden text-white"
-            >
+            <button onClick={openNav ? closeMenu : openMenu} className="lg:hidden text-white">
               {openNav ? <X /> : <Menu />}
             </button>
           </div>
@@ -126,33 +119,34 @@ const Header = () => {
 
       {/* ================= MOBILE MENU ================= */}
       {openNav && (
-        <div className="lg:hidden fixed inset-0 bg-[#0F172A] pt-[80px] px-6 space-y-6 text-white">
-          
-          {/* SEARCH (MOBILE) */}
-          <div className="flex items-center bg-white rounded-md overflow-hidden">
+        <div className="fixed inset-0 z-40 bg-[#0F172A] pt-[80px] px-6 text-white lg:hidden">
+
+          {/* TOP BAR */}
+          <div className="flex items-center gap-3 mb-6">
             <input
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               placeholder="Search mentor"
-              className="px-3 py-2 outline-none text-sm w-full"
+              className="flex-1 px-3 py-2 text-sm rounded-md outline-none text-black"
             />
-            <button
-              onClick={handleSearch}
-              className="px-3 text-gray-600"
-            >
-              <Search size={18} />
+            <button onClick={handleSearch}>
+              <Search />
+            </button>
+            <button onClick={closeMenu}>
+              <X />
             </button>
           </div>
 
+          {/* NAV LINKS */}
           <nav className="flex flex-col gap-5 text-lg">
-            <Link to="/mybooking">My Booking</Link>
-            <Link to="/category">Category</Link>
-            <Link to="/jobportal">Job Portal</Link>
-            <Link to="/free-resource">Free Resource</Link>
-            <Link to="/aboutsection">About</Link>
+            <Link to="/mybooking" onClick={closeMenu}>My Booking</Link>
+            <Link to="/category" onClick={closeMenu}>Category</Link>
+            <Link to="/jobportal" onClick={closeMenu}>Job Portal</Link>
+            <Link to="/free-resource" onClick={closeMenu}>Free Resource</Link>
+            <Link to="/aboutsection" onClick={closeMenu}>About</Link>
 
             {!userLogedin && (
-              <Button onClick={() => setIsLogin(true)}>
+              <Button onClick={() => { setIsLogin(true); closeMenu(); }}>
                 Sign in
               </Button>
             )}
