@@ -1,54 +1,67 @@
-import { useContext } from 'react';
-import { mentorContext } from '../context/MentorContext';
-import { Link } from 'react-router-dom';
+import { useContext } from "react";
+import { mentorContext } from "../context/MentorContext";
+import { Link } from "react-router-dom";
 
 const MyBookingCard = ({ item }) => {
-    const { formatDate } = useContext(mentorContext);
-    
-    let { mentorId, slot, status ,roomNo} = item;
-    const { name, profilePic, title } = mentorId;
+  const { formatDate } = useContext(mentorContext);
 
-    const slotDate = new Date(slot); 
-    const now = new Date();
-    const timeDifferenceInMinutes = (slotDate - now) / (1000 * 60);
+  if (!item || !item.mentorId) return null;
 
-    // if (timeDifferenceInMinutes < 0) {
-    //     status = 'Done';
-    // } else if (timeDifferenceInMinutes <= 30) {
-    //     status = 'Join';
-    // } else {
-    //     status = 'Scheduled';
-    // }
-    status='Join'
+  const { mentorId, slot, status, roomNo } = item;
+  const { name, profilePic, title } = mentorId;
 
-    const date = formatDate(slot);
+  const slotDate = new Date(slot);
+  const now = new Date();
+  const minutesDiff = (slotDate - now) / (1000 * 60);
 
-    const handleJoinSession = () => {
-        // Logic to handle joining the session (e.g., opening a video call link)
-        console.log('Join session clicked');
-    };
+  const canJoin =
+    status === "JOIN" &&
+    minutesDiff <= 10 && // allow join 10 mins before
+    minutesDiff >= -60;  // block very old sessions
 
-    return (
-        <div className="flex bg-gray-300 text-black p-2 rounded-md gap-4 w-[500px]">
-            <img src={profilePic} className="w-32 h-32 rounded-full" alt={`${name}'s profile`} />
-            <div>
-                <p>{`Mentor: ${name}`}</p>
-                <p>{`Title: ${title}`}</p>
-                <p>Status: <span className={`text-green-700 font-semibold ${status === 'Join' ? 'text-blue-600' : ''}`}>{status}</span></p>
-                <p className='mb-2'>{`Slot: ${date}`}</p>
+  const date = formatDate(slot);
 
-                {/* Conditionally render the "Join" button if status is 'Join' */}
-                {status === 'Join' && (
-                    <Link to={`/room/${roomNo}`}
-                        onClick={handleJoinSession}
-                        className="mt-2 mb-2 bg-blue-600 text-white px-4 py-2 rounded-md"
-                    >
-                        Join Session
-                    </Link>
-                )}
-            </div>
-        </div>
-    );
+  return (
+    <div className="flex bg-gray-300 text-black p-3 rounded-md gap-4 w-[500px]">
+      <img
+        src={profilePic}
+        className="w-28 h-28 rounded-full object-cover"
+        alt={`${name}'s profile`}
+      />
+
+      <div className="flex flex-col gap-1">
+        <p className="font-semibold">{`Mentor: ${name}`}</p>
+        <p className="text-sm text-gray-700">{title}</p>
+
+        <p>
+          Status:{" "}
+          <span
+            className={`font-semibold ${
+              status === "JOIN"
+                ? "text-blue-600"
+                : status === "COMPLETED"
+                ? "text-green-700"
+                : "text-gray-700"
+            }`}
+          >
+            {status}
+          </span>
+        </p>
+
+        <p className="text-sm">{`Slot: ${date}`}</p>
+
+        {/* JOIN BUTTON */}
+        {canJoin && (
+          <Link
+            to={`/room/${roomNo}`}
+            className="mt-2 inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+          >
+            Join Session
+          </Link>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default MyBookingCard;

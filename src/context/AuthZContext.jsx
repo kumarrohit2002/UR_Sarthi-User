@@ -132,10 +132,11 @@ export default function AuthZContextProvider({ children }) {
         setIsLoading(false);
     }
 
-    function logOut(){
+    async function  logOut(){
         setIsLoading(true);
         setUserLogedin(false);
         localStorage.removeItem('userlogin');
+        await axios.post(`${baseUrl}/api/v1/user/logout`);
         Cookies.remove('token');
         navigate('/');
         window.location.reload();
